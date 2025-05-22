@@ -57,3 +57,30 @@ The system enforces the following rules when submitting a commodity request:
 5. **Dynamic Commodity List**: Commodities are dynamically listed and can be added without modifying the form.
 
 Validation is enforced both at the server side and through user feedback in the form.
+## 🧩 Design Overview
+
+The system is built using **ASP.NET Core Razor Pages** and **Entity Framework Core** to manage commodity requests submitted by Community Health Workers (CHWs). Key design decisions:
+
+- **Separation of Concerns**:
+  - Models for data structures (CHW, CHA, Commodity)
+  - Razor Pages for UI and business logic
+  - EF Core for data access and validation
+
+- **Database Relationships**:
+  - Each CHW is assigned to a CHA (many-to-one)
+  - Each commodity request is linked to both a CHW and CHA
+  - Status of requests is managed via an enum (`Pending`, `Approved`, `Rejected`)
+
+- **Form Design**:
+  - The form dynamically lists CHWs and links to their associated CHA
+  - Quantity field includes server-side validation for:
+    - Must be a whole number
+    - Must be less than 100
+    - No more than 200 units/month per commodity per CHW
+    - No duplicate requests per commodity per CHW per day
+
+- **Scalability**:
+  - Commodities are dynamically loaded—new ones can be added without code changes
+  - Data constraints are enforced via EF Core and not hardcoded in views
+
+This modular design ensures maintainability, clarity, and validation at the data layer.

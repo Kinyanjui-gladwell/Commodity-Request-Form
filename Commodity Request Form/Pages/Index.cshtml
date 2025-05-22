@@ -1,0 +1,36 @@
+﻿@page
+@model Commodity_Request_Form.Pages.Commodities.IndexModel
+@using Commodity_Request_Form.Enums
+@{
+    ViewData["Title"] = "Commodity Requests";
+}
+
+<h2>Commodity Requests</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>CHW</th>
+            <th>CHA</th>
+            <th>Commodity</th>
+            <th>Quantity</th>
+            <th>Date Requested</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Commodities)
+        {
+            <tr>
+                <td>@($"{item.CHW.F_Name} {item.CHW.L_Name}")</td>
+                <td>@($"{item.CHA.F_Name} {item.CHA.L_Name}")</td>
+                <td>@item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.DateRequested.ToString("yyyy-MM-dd")</td>
+                <td>@item.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-page="/CreateRequest" class="btn btn-primary">New Request</a>

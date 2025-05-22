@@ -1,0 +1,73 @@
+﻿@page
+@model Commodity_Request_Form.Pages.Commodities.CreateModel
+@{
+    ViewData["Title"] = "Request Commodity";
+    var chwJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.CHWs.Select(c => new
+        {
+            id = c.CHW_ID,
+            name = c.F_Name + " " + c.L_Name,
+            cha = c.CHA.F_Name + " " + c.CHA.L_Name
+        })
+    );
+}
+
+<h2>Request Commodity</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Commodity.Name"></label>
+        <input asp-for="Commodity.Name" class="form-control" />
+        <select asp-for="Commodity.Name" class="form-control">
+            <option value="">-- Select Commodity --</option>
+            @foreach (var item in Model.CommodityList)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Commodity.Name" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Commodity.Quantity"></label>
+        <input asp-for="Commodity.Quantity" class="form-control" />
+        <span asp-validation-for="Commodity.Quantity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Commodity.CHW_ID">Community Health Worker</label>
+        <select asp-for="Commodity.CHW_ID" asp-items="Model.CHWList" class="form-control" id="CHWSelect">
+            <option value="">-- Select CHW --</option>
+        </select>
+        <span asp-validation-for="Commodity.CHW_ID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Community Health Assistant</label>
+        <input type="text" id="CHAName" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Commodity.Status"></label>
+        <select asp-for="Commodity.Status" asp-items="Model.StatusList" class="form-control">
+            <option value="">-- Select Status --</option>
+        </select>
+        <span asp-validation-for="Commodity.Status" class="text-danger"></span>
+    </div>
+
+    <input type="submit" value="Submit Request" class="btn btn-primary" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const chwData = @Html.Raw(chwJson);
+
+        document.getElementById("CHWSelect").addEventListener("change", function () {
+            const selectedId = parseInt(this.value);
+            const selectedCHW = chwData.find(c => c.id === selectedId);
+            document.getElementById("CHAName").value = selectedCHW ? selectedCHW.cha : "";
+        });
+    </script>
+}

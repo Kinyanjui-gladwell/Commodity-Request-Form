@@ -1,0 +1,61 @@
+﻿@page
+@model Commodity_Request_Form.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total CHAs</h5>
+                <p class="card-text display-6">@Model.TotalCHAs</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total CHWs</h5>
+                <p class="card-text display-6">@Model.TotalCHWs</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Requests</h5>
+                <p class="card-text display-6">@Model.TotalRequests</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Recent Requests</h4>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>CHW</th>
+            <th>Commodity</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.RecentRequests)
+        {
+            <tr>
+                <td>@($"{item.CHW.F_Name} {item.CHW.L_Name}")</td>
+                <td>@item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.DateRequested.ToString("yyyy-MM-dd")</td>
+                <td>@item.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-page="/CreateRequest" class="btn btn-primary">New Request</a>
